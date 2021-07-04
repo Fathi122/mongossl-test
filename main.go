@@ -23,7 +23,7 @@ func main(){
   }
   tlsConfig := &tls.Config{}
   tlsConfig.RootCAs = roots
-  // Load publi/private key pair
+  // Load public/private key pair
   if cer, err := tls.LoadX509KeyPair("./mongoinit/server.crt", "./mongoinit/server.key");err != nil {
      log.Errorln("Failed to load public/private keys: ",err)
      return
