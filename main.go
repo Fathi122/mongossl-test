@@ -12,17 +12,18 @@ import(
 func main(){
   // set log level
   log.SetLevel(log.DebugLevel)
+  // TLS config structure
+  tlsConfig := &tls.Config{}
   // Update Root ca pool
   roots := x509.NewCertPool()
-  if ca, err := ioutil.ReadFile("./mongoinit/ca.crt"); err == nil { 
-    roots.AppendCertsFromPEM(ca)
-    log.Debugln("Updated Root ca pool")
-  }else {
+  if ca, err := ioutil.ReadFile("./mongoinit/ca.crt"); err != nil {
     log.Errorln("Failed to update Root ca pool: ", err) 
     return
+  }else {
+    roots.AppendCertsFromPEM(ca)
+    log.Debugln("Updated Root ca pool")
+    tlsConfig.RootCAs = roots
   }
-  tlsConfig := &tls.Config{}
-  tlsConfig.RootCAs = roots
   // Load public/private key pair
   if cer, err := tls.LoadX509KeyPair("./mongoinit/server.crt", "./mongoinit/server.key");err != nil {
      log.Errorln("Failed to load public/private keys: ",err)
