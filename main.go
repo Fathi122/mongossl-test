@@ -32,7 +32,7 @@ func main(){
      tlsConfig.Certificates = []tls.Certificate{cer}
   }
   //connection URL: "mongodb://<username>:<password>@<hostname>:<port>,<hostname>:<port>/<db-name>
-  connectionURL := "mongodb://testuser:testuser@192.168.99.107:27017/mongodbssl"
+  connectionURL := "mongodb://testuser:testuser@localhost:27017/mongodbssl"
   if dialInfo, err := mgo.ParseURL(connectionURL);err != nil{
      log.Errorln("Failed to parse Url: ",err)
   }else{
