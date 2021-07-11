@@ -1,13 +1,11 @@
 #!/bin/bash
 
 nohup gosu mongodb mongod --dbpath=/data/db &
-nohup gosu mongodb mongo admin --eval "help" > /dev/null 2>&1
-res=$?
-
-while [[ "$res" -ne 0 ]]; do
+ret=0
+echo $res
+while [[ "$ret" != 1 ]]; do
   echo "Waiting mongodb starting"
-  mongo admin --eval "help" > /dev/null 2>&1
-  res=$?
+  ret=$(mongo admin --quiet --eval "db.adminCommand('ping').ok")
   sleep 2
 done
 
@@ -18,3 +16,4 @@ nohup gosu mongodb mongo admin --eval "db.shutdownServer();"
 # restart mongod with ssl support by loading config file
 nohup gosu mongodb mongod --dbpath=/data/db --config /etc/mongod.conf --bind_ip_all --auth
 
+ 
