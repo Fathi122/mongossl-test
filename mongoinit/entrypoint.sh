@@ -1,8 +1,8 @@
 #!/bin/bash
 
 nohup gosu mongodb mongod --dbpath=/data/db &
+
 ret=0
-echo $res
 while [[ "$ret" != 1 ]]; do
   echo "Waiting mongodb starting"
   ret=$(mongo admin --quiet --eval "db.adminCommand('ping').ok")

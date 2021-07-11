@@ -21,5 +21,4 @@ services:
     restart: always
     environment:
       MONGO_INITDB_DATABASE: mongodbssl
-    entrypoint: /bin/entrypoint.sh
-
+    entrypoint: "/bin/entrypoint.sh"
