@@ -1,0 +1,21 @@
+FROM golang:alpine AS builder
+RUN mkdir /app
+
+COPY main.go /app
+COPY go.mod /app
+
+WORKDIR /app
+
+RUN go build -o main .
+
+FROM alpine
+
+RUN mkdir -p /app
+COPY --from=builder /app/main /app/.
+
+# Install CA certificates
+RUN apk update && apk add --no-cache --update ca-certificates tzdata && chmod +x /app/main
+
+WORKDIR /app
+
+CMD [ "/app/main","k8s" ]
