@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: clientapp-tier
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          clientapp-tier: "true"
+  podSelector:
+    matchLabels:
+          app: mongo

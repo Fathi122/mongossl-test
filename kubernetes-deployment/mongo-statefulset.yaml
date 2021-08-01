@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo # has to match .spec.template.metadata.labels
+  serviceName: "mongo"
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: mongo # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - command:
+        - /bin/entrypoint.sh
+        env:
+        - name: MONGO_INITDB_DATABASE
+          value: mongodbssl
+        image: taf122/mongo-test:latest
+        imagePullPolicy: Always
+        name: mongo
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - mountPath: /data/db
+          name: data01
+  volumeClaimTemplates:
+  - metadata:
+      name: data01
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

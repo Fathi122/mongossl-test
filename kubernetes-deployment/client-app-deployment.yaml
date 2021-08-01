@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    clientapp-tier: "true"
+  name: testapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      clientapp-tier: "true"
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        clientapp-tier: "true"
+    spec:
+      containers:
+      - image: taf122/testapp:latest
+        imagePullPolicy: Always
+        name: testapp
+        volumeMounts:
+          - mountPath: "/opt/certs"
+            name: secretsvol
+        resources: {}
+      volumes:
+      - name: secretsvol
+        secret:
+          secretName: mongocerts
+          items:
+          - key: ca.crt
+            path: ca.crt
+          - key: server.key
+            path: server.key            
+          - key: server.crt
+            path: server.crt            
+status: {}
